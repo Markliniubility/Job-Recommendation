@@ -60,4 +60,8 @@ public class Item {
     public String getDescription() {
         return description;
     }
+
+    public void setKeywords(Set<String> strings) {
+        keywords = strings;
+    }
 }

@@ -2,6 +2,7 @@ package com.laioffer.job.external;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.laioffer.job.entity.Item;
+import com.laioffer.job.entity.MonkeyLearnClient;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
@@ -12,9 +13,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class GitHubClient {
     private static final String URL_TEMPLATE = "https://jobs.github.com/positions.json?description=%s&lat=%s&long=%s";
@@ -43,7 +42,9 @@ public class GitHubClient {
                 return Collections.emptyList();
             }
             ObjectMapper mapper = new ObjectMapper();
-            return Arrays.asList(mapper.readValue(entity.getContent(), Item[].class));
+            List<Item> items = Arrays.asList(mapper.readValue(entity.getContent(), Item[].class));
+            extractKeywords(items);
+            return items;
         };
 
         try {
@@ -52,6 +53,18 @@ public class GitHubClient {
             e.printStackTrace();
         }
         return Collections.emptyList();
+    }
+
+    private void extractKeywords(List<Item> items) {
+        MonkeyLearnClient monkeyLearnClient = new MonkeyLearnClient();
+        List<String> descriptions = new ArrayList<>();
+        for (Item item: items) {
+            descriptions.add(item.getDescription());
+        }
+        List<Set<String>> keywordList = monkeyLearnClient.extract(descriptions);
+        for (int i = 0; i < items.size(); i++) {
+            items.get(i).setKeywords(keywordList.get(i));
+        }
     }
 
 }

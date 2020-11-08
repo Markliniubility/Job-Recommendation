@@ -31,6 +31,21 @@ public class Item {
     private Set<String> keywords;
     private boolean favorite;
 
+    public Item() {
+    }
+
+    public Item(String id, String title, String location, String companyLogo, String url, String description, Set<String> keywords, boolean favorite) {
+        this.id = id;
+        this.title = title;
+        this.location = location;
+        this.companyLogo = companyLogo;
+        this.url = url;
+        this.description = description;
+        this.keywords = keywords;
+        this.favorite = favorite;
+    }
+
+
     @JsonProperty("id")
     public String getId() {
         return id;
@@ -56,9 +71,19 @@ public class Item {
         return url;
     }
 
+    @JsonProperty("keywords")
+    public Set<String> getKeywords() {
+        return keywords;
+    }
+
     @JsonProperty("description")
     public String getDescription() {
         return description;
+    }
+
+    @JsonProperty("favorite")
+    public boolean isFavorite() {
+        return favorite;
     }
 
     public void setKeywords(Set<String> strings) {

@@ -27,7 +27,7 @@ public class HistoryServlet extends HttpServlet {
             return;
         }
         response.setContentType("application/json");
-        HistoryRequestBody body = mapper.readValue(request.getReader(),HistoryRequestBody.class);
+        HistoryRequestBody body = mapper.readValue(request.getReader(), HistoryRequestBody.class);
 
         MySQLConnection connection = new MySQLConnection();
         connection.setFavoriteItems(body.userId, body.favorite);
@@ -47,6 +47,7 @@ public class HistoryServlet extends HttpServlet {
             return;
         }
         response.setContentType("application/json");
+
         HistoryRequestBody body = mapper.readValue(request.getReader(), HistoryRequestBody.class);
 
         MySQLConnection connection = new MySQLConnection();
@@ -55,6 +56,7 @@ public class HistoryServlet extends HttpServlet {
 
         ResultResponse resultResponse = new ResultResponse("SUCCESS");
         mapper.writeValue(response.getWriter(), resultResponse);
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -23,24 +23,13 @@ public class SearchServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        HttpSession session = request.getSession(false);
-        if (session == null) {
-            response.setStatus(403);
-            mapper.writeValue(response.getWriter(),new ResultResponse("Session Invalid"));
-            return;
-        }
-        String userId = session.getId();
         double lat = Double.parseDouble(request.getParameter("lat"));
         double lon = Double.parseDouble(request.getParameter("lon"));
 
-        MySQLConnection connection = new MySQLConnection();
-        Set<String> favoritedItemIds = connection.getFavoriteItemIds(userId);
-        connection.close();
-        //do favorite later.
         GitHubClient client = new GitHubClient();
         response.setContentType("application/json");
         List<Item> items = client.search(lat, lon, null);
+        ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getWriter(), items);
     }
 }

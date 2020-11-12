@@ -37,6 +37,8 @@ public class GitHubClient {
             if (response.getStatusLine().getStatusCode() != 200) {
                 return Collections.emptyList();
             }
+            System.out.println(response.getEntity());
+            System.out.println("12364");
             HttpEntity entity = response.getEntity();
             if (entity == null) {
                 return Collections.emptyList();
@@ -62,7 +64,7 @@ public class GitHubClient {
             descriptions.add(item.getDescription());
         }
         List<Set<String>> keywordList = monkeyLearnClient.extract(descriptions);
-        for (int i = 0; i < items.size(); i++) {
+        for (int i = 0; i < keywordList.size(); i++) {
             items.get(i).setKeywords(keywordList.get(i));
         }
     }

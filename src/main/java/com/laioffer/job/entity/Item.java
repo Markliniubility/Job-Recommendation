@@ -3,20 +3,7 @@ package com.laioffer.job.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -43,12 +30,6 @@ public class Item {
         this.description = description;
         this.keywords = keywords;
         this.favorite = favorite;
-    }
-
-
-    @JsonProperty("id")
-    public String getId() {
-        return id;
     }
 
     @JsonProperty("title")
@@ -88,5 +69,10 @@ public class Item {
 
     public void setKeywords(Set<String> strings) {
         keywords = strings;
+    }
+
+    @JsonProperty("id")
+    public String getId() {
+        return this.id;
     }
 }

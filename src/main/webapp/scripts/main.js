@@ -280,12 +280,12 @@
      * /search?user_id=1111&lat=37.38&lon=-122.08
      */
     function loadNearbyItems() {
-        console.log('loadNearbyItems');
+        console.log('loadNearbyItems' + lat);
         activeBtn('nearby-btn');
 
         // The request parameters
         var url = './search';
-        var params = 'user_id=' + user_id + '&lat=' + lat + '&lon=' + lng;
+        var params = '&lat=' + lat + '&lon=' + lng;
         var data = null;
 
         // display loading message
@@ -444,8 +444,8 @@
      </li>
      */
     function addItem(itemList, item) {
-        var item_id = item.item_id;
-
+        var item_id = item.id;
+        console.log(item.id)
         // create the <li> tag and specify the id and class attributes
         var li = $create('li', {
             id: 'item-' + item_id,
@@ -457,8 +457,8 @@
         li.dataset.favorite = item.favorite;
 
         // item image
-        if (item.image_url) {
-            li.appendChild($create('img', { src: item.image_url }));
+        if (item.company_logo) {
+            li.appendChild($create('img', { src: item.company_logo }));
         } else {
             li.appendChild($create('img', {
                 src: 'https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png'
@@ -473,36 +473,8 @@
             href: item.url,
             target: '_blank'
         });
-        title.innerHTML = item.name;
+        title.innerHTML = item.title;
         section.appendChild(title);
-
-        // category
-        var category = $create('p', {
-            className: 'item-category'
-        });
-        category.innerHTML = 'Category: ' + item.categories.join(', ');
-        section.appendChild(category);
-
-        // stars
-        var stars = $create('div', {
-            className: 'stars'
-        });
-
-        for (var i = 0; i < item.rating; i++) {
-            var star = $create('i', {
-                className: 'fa fa-star'
-            });
-            stars.appendChild(star);
-        }
-
-        if (('' + item.rating).match(/\.5$/)) {
-            stars.appendChild($create('i', {
-                className: 'fa fa-star-half-o'
-            }));
-        }
-
-        section.appendChild(stars);
-
         li.appendChild(section);
 
         // address
@@ -511,7 +483,7 @@
         });
 
         // ',' => '<br/>',  '\"' => ''
-        address.innerHTML = item.address.replace(/,/g, '<br/>').replace(/\"/g, '');
+        address.innerHTML = item.location.replace(/,/g, '<br/>').replace(/\"/g, '');
         li.appendChild(address);
 
         // favorite link

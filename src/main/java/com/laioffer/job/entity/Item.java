@@ -75,4 +75,8 @@ public class Item {
     public String getId() {
         return this.id;
     }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
 }

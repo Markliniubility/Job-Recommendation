@@ -23,13 +23,24 @@ public class SearchServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userId = request.getParameter("user_id");
         double lat = Double.parseDouble(request.getParameter("lat"));
         double lon = Double.parseDouble(request.getParameter("lon"));
 
+        MySQLConnection connection = new MySQLConnection();
+        Set<String> favoritedItemIds = connection.getFavoriteItemIds(userId);
+        connection.close();
+
         GitHubClient client = new GitHubClient();
-        response.setContentType("application/json");
         List<Item> items = client.search(lat, lon, null);
+
+        for (Item item : items) {
+            item.setFavorite(favoritedItemIds.contains(item.getId()));
+        }
+
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(response.getWriter(), items);
+        response.setContentType("application/json");
+        response.getWriter().print(mapper.writeValueAsString(items));
+
     }
 }

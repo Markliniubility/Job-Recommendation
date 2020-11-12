@@ -285,14 +285,14 @@
 
         // The request parameters
         var url = './search';
-        var params = '&lat=' + lat + '&lon=' + lng;
-        var data = null;
+        var params = 'user_id=' + user_id + '&lat=' + lat + '&lon=' + lng;
+        var req = JSON.stringify({});
 
         // display loading message
         showLoadingMessage('Loading nearby items...');
 
         // make AJAX call
-        ajax('GET', url + '?' + params, data,
+        ajax('GET', url + '?' + params, req,
             // successful callback
             function(res) {
                 var items = JSON.parse(res);
@@ -377,17 +377,17 @@
      * API end point: [POST]/[DELETE] /history request json data: {
      * user_id: 1111, visited: [a_list_of_business_ids] }
      */
-    function changeFavoriteItem(item_id) {
+    function changeFavoriteItem(item) {
         // check whether this item has been visited or not
-        var li = document.querySelector('#item-' + item_id);
-        var favIcon = document.querySelector('#fav-icon-' + item_id);
+        var li = document.querySelector('#item-' + item.id);
+        var favIcon = document.querySelector('#fav-icon-' + item.id);
         var favorite = !(li.dataset.favorite === 'true');
 
         // request parameters
         var url = './history';
         var req = JSON.stringify({
             user_id: user_id,
-            favorite: [item_id]
+            favorite: item
         });
         var method = favorite ? 'POST' : 'DELETE';
 
@@ -476,7 +476,7 @@
         title.innerHTML = item.title;
         section.appendChild(title);
         li.appendChild(section);
-        
+
         // address
         var address = $create('p', {
             className: 'item-address'
@@ -492,7 +492,7 @@
         });
 
         favLink.onclick = function() {
-            changeFavoriteItem(item_id);
+            changeFavoriteItem(item);
         };
 
         favLink.appendChild($create('i', {

@@ -1,11 +1,18 @@
 package com.laioffer.job.servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.laioffer.job.entity.Item;
+import com.laioffer.job.entity.ResultResponse;
+import com.laioffer.job.recommendation.Recommendation;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "RecommendationServlet", urlPatterns = {"/recommendation"})
 public class RecommendationServlet extends HttpServlet {
@@ -14,6 +21,19 @@ public class RecommendationServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.getWriter().write("This is RecommendationServlet");
+        ObjectMapper mapper = new ObjectMapper();
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            response.setStatus(403);
+            mapper.writeValue(response.getWriter(),new ResultResponse("Invalid Session"));
+            return;
+        }
+        String userId = session.getId();
+        double lat = Double.parseDouble(request.getParameter("lat"));
+        double lon = Double.parseDouble(request.getParameter("lon"));
+        response.setContentType("application/json");
+        Recommendation recommendation = new Recommendation();
+        List<Item> recommendations = recommendation.recommendItems(userId,lat,lon);
+        mapper.writeValue(response.getWriter(),recommendations);
     }
 }
